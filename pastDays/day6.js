@@ -56,22 +56,27 @@ const day6ImmortalLFish = async () => {
   for (let i = 0; i < list.length; i++) {
     list[i] = parseInt(list[i]);
   }
-  // console.log(list);
-  let newList = list;
-  let days = 80
-  for (let i = 0; i < days; i++) {
-    for (let j = 0; j < list.length; j++) {
-      if (list[j] == 0) {
-        list[j] = 6;
-        newList.push(9);
-      }
-      else list[j]--;
-      
-    }
-    list = newList;
-    // console.log(list);
+  const fish = new Array(9).fill(0);
+  
+  for (let i = 0; i < list.length; i++) {
+    fish[list[i]]++;
   }
-  console.log(list.length);
+  console.log(fish);
+  
+  const days = 256;
+  
+  for (let day = 0; day < days; day++) {
+    // Credit goes to CBuchert for helping with the code
+    // Each day, fish of day 0 reproduce.
+    // Reproducing means: push 1 for each reproducing fish.
+    // splice off position 0. Add position 0 to position 6.
+    const reproducingFish = fish.splice(0, 1)[0];
+    
+    fish[6] += reproducingFish;
+    fish.push(reproducingFish);
+    const fishCount = fish.reduce((acc, curr) => acc + curr, 0)
+    console.log({day, fishCount, fish});
+  }
 }
 
 
