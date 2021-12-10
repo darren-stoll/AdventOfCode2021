@@ -73,7 +73,6 @@ const day8_2 = async () => {
     let decodedNumberStr = "";
     jumbledNumbers = jumbledNumbers.sort((a,b) => a.length - b.length)
     
-    console.log(jumbledNumbers);
     numList[1] = jumbledNumbers[0];
     numList[7] = jumbledNumbers[1];
     numList[4] = jumbledNumbers[2];
@@ -142,20 +141,17 @@ const day8_2 = async () => {
       }
     }
     
-    console.log(numList);
-    console.log(lettersToDecode);
     // sort all the letters alphabetically in both sets
     for (let j = 0; j < numList.length; j++) {
       numList[j] = numList[j].split('').sort().join('');
     }
-    console.log(numList);
+    
     for (let j = 0; j < lettersToDecode.length; j++) {
       lettersToDecode[j] = lettersToDecode[j].split('').sort().join('');
       decodedNumberStr += numList.indexOf(lettersToDecode[j])
     }
     decodedNumbers.push(parseInt(decodedNumberStr));
   }
-  console.log(decodedNumbers);
   let sum = decodedNumbers.reduce((acc, a) => acc + a)
   console.log(sum)
 }
