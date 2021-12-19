@@ -6,7 +6,7 @@ const assertEqual = (expected, actual) => {
 
 const generateInputList = async (txtFile) => {
   try {
-    var list = [];
+    let list = [];
     const data = await fs.readFile(txtFile, 'utf8')
     list = data.split('\r\n')
     return list;
@@ -21,7 +21,7 @@ const listInput = () => {
 }
 
 const day9 = async () => {
-  list = await listInput();
+  const list = await listInput();
   console.log(list);
   const lowPointValues = [];
   for (let i = 0; i < list.length; i++) {
@@ -55,17 +55,134 @@ const checkAll = () => {
 }
 
 const day9_2 = async () => {
-  list = await listInput();
+  let list = await listInput();
   console.log(list);
-  const trackedList = [];
+
+  const newGrid = []
   for (let i = 0; i < list.length; i++) {
-    let row = [];
+    const gridRow = []
     for (let j = 0; j < list[i].length; j++) {
-      row.push([list[i][j], 0])
+      gridRow.push(parseInt(list[i][j]));
     }
-    trackedList.push(row);
+    newGrid.push(gridRow);
   }
-  console.log(trackedList)
+  list = newGrid
+  console.log(list)
+
+  const startInfection = () => {
+    for (let i = 0; i < list.length; i++) {
+      for (let j = 0; j < list[i].length; j++) {
+        if (list[i][j] < 9) {
+          list[i][j] = "m"
+          return
+        }
+      }
+    }
+  }
+  
+  const maxHeight = list.length - 1
+  const maxWidth = list[0].length - 1
+  
+  const checkInBounds = (posX, posY) => {
+    if (posX >= 0 && posY >= 0 && posY <= maxHeight && posX <= maxWidth) return true;
+    return false;
+  }
+  
+  const infect = () => {
+    let mCount = 0
+    for (let i = 0; i < list.length; i++) {
+      for (let j = 0; j < list[i].length; j++) {
+        if (list[i][j] === "m") {
+          // check left
+          if (checkInBounds(j,i-1)) {
+            if (list[i-1][j] < 9) {
+              list[i-1][j] = "m";
+              mCount++;
+            }
+          }
+          // check right
+          if (checkInBounds(j,i+1)) {
+            if (list[i+1][j] < 9) {
+              list[i+1][j] = "m";
+              mCount++;
+            }
+          }
+          // check up
+          if (checkInBounds(j-1,i)) {
+            if (list[i][j-1] < 9) {
+              list[i][j-1] = "m";
+              mCount++
+            }
+          }
+          // check down
+          if (checkInBounds(j+1,i)) {
+            if (list[i][j+1] < 9) {
+              list[i][j+1] = "m";
+              mCount++
+            }
+          }
+          
+        }
+      }
+    }
+    return mCount
+  }
+  
+  const infectEverything = () => {
+    while (true) {
+      let mCount = infect()
+      if (mCount === 0) break;
+    }
+  }
+  
+  const prettify = () => {
+    let str = "" 
+    for (let i = 0; i < list.length; i++) {
+      str += list[i].join('') + "\n"
+    }
+    return str
+  }
+  const mToNine = () => {
+    let count = 0;
+    for (let i = 0; i < list.length; i++) {
+      for (let j = 0; j < list[i].length; j++) {
+        if (list[i][j] === "m") {
+          count++;
+          list[i][j] = 9
+        }
+      }
+    }
+    return count
+  }
+  
+  const listOfBasinSizes = []
+  
+  const checkAllNines = () => {
+    let count = 0;
+    for (let i = 0; i < list.length; i++) {
+      for (let j = 0; j < list[i].length; j++) {
+        if (list[i][j] !== 9) count++;
+      }
+    }
+    console.log(count);
+    if (count === 0) return false;
+    return true
+  }
+  
+  while (checkAllNines()) {
+    // console.log(list)
+    // console.log(prettify())
+    startInfection()
+    infectEverything()
+    listOfBasinSizes.push(mToNine())
+  }
+  
+  listOfBasinSizes.sort((a,b) => b - a)
+  
+  // answer
+  console.log(listOfBasinSizes[0] * listOfBasinSizes[1] * listOfBasinSizes[2])
+  
+  console.log(prettify())
 }
 
 day9_2()

@@ -8,7 +8,7 @@ var fileName = './day1.txt'
 
 var generateInputList = async (txtFile) => {
   try {
-    var list = [];
+    let list = [];
     const data = await fs.readFile(txtFile, 'utf8')
     list = data.split('\r\n')
     console.log(list);
@@ -27,7 +27,7 @@ const listTestValue = () => {
 }
 
 const dayNum = async () => {
-  list = await listTestValue();
+  const list = await listTestValue();
 }
 
 dayNum();
